@@ -1,0 +1,350 @@
+@import url('https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Foundation:wght@400..700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #4F46E5; /* Indigo 600 */
+  --primary-light: #EEF2FF; /* Indigo 50 */
+  --bg-color: #F9FAFB;
+  --text-color: #111827;
+  --border-color: #E5E7EB;
+  
+  --line-red: #EF4444; /* Baseline */
+  --line-blue: #3B82F6; /* Auxiliary lines */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* Typography for English Writing (Textbook Print Style) */
+.edu-font {
+  font-family: 'Edu NSW ACT Foundation', sans-serif;
+  font-weight: 600;
+}
+
+/* Blackboard Mode (4-lines background) */
+.blackboard-bg {
+  /* 
+    Create a 4-line pattern using linear-gradient.
+    Assume line height is 24px per line gap. Total 4 lines = 3 gaps = 72px.
+    Top line: blue
+    Mid line: blue (dashed - CSS linear gradient can't do dashed easily, so we use solid light blue)
+    Base line: red
+    Bottom line: blue
+  */
+  background-color: white;
+  background-image: 
+    linear-gradient(var(--line-blue) 2px, transparent 2px),
+    linear-gradient(rgba(59, 130, 246, 0.5) 2px, transparent 2px),
+    linear-gradient(var(--line-red) 2px, transparent 2px),
+    linear-gradient(var(--line-blue) 2px, transparent 2px);
+  background-size: 100% 120px; /* Total height of one row including margins */
+  background-position: 
+    0 24px, 
+    0 54px, 
+    0 84px, 
+    0 114px;
+}
+
+/* Animations */
+@keyframes drawStroke {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+.stroke-anim path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawStroke 2s forwards;
+}
+
+/* App Layout */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background: white;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Dashboard Forms */
+.search-form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.input-group label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.input-control {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #4338CA;
+}
+
+/* Word Columns */
+.word-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 5rem; /* space for quickbar */
+}
+
+.column {
+  background: white;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.column h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Word Card */
+.word-card {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.word-card:hover {
+  border-color: var(--primary);
+}
+
+.word-card.selected {
+  background-color: var(--primary-light);
+  border-color: var(--primary);
+}
+
+.word-info {
+  margin-left: 1rem;
+  flex: 1;
+}
+
+.word-en {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.word-ko {
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+/* Quick Bar */
+.quick-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  padding: 1rem 2rem;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 70%;
+}
+
+.tag {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Blackboard View */
+.blackboard-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-toolbar {
+  padding: 1rem;
+  background: #1F2937;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bb-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 4rem;
+}
+
+/* Added layout classes */
+.screen-layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 120px;
+  align-content: start;
+}
+
+.pdf-layout {
+  display: block;
+}
+
+.bb-word-row {
+  height: 120px; /* Exactly matches the background repeat size */
+  display: flex;
+  align-items: baseline; /* Align text exactly by its baseline */
+  position: relative;
+}
+
+/* This invisible strut forces the baseline of the row to sit exactly on the red line (84px) */
+.bb-word-row::before {
+  content: '';
+  display: inline-block;
+  height: 84px;
+  width: 0;
+}
+
+.bb-text {
+  font-size: 72px; /* Adjusted font size for perfect fit */
+  line-height: 1;
+  position: relative;
+  top: 0; /* Baseline alignment handles vertical positioning now */
+  margin-right: 1rem;
+  color: #000;
+}
+
+.bb-meaning {
+  font-size: 1.5rem;
+  color: #4B5563;
+  margin-right: 1rem;
+}
+
+.bb-controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.icon-btn {
+  background: #F3F4F6;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: background 0.2s;
+}
+
+.icon-btn:hover {
+  background: #E5E7EB;
+}
+
+/* Fullscreen adjustments */
+.hidden-lines {
+  background-image: none !important;
+}
+
+.hidden-meaning {
+  visibility: hidden;
+}
