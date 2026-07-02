@@ -1,7 +1,5 @@
-// Vercel deployment uses absolute URL to Firebase Functions, local dev uses local emulator
-const CLOUD_FUNCTION_URL = import.meta.env.PROD 
-  ? 'https://us-central1-265788836290.cloudfunctions.net/getVocabulary' 
-  : 'http://127.0.0.1:5001/demo-test/us-central1/getVocabulary';
+// Vercel deployment uses Vercel Serverless Functions (/api/...)
+const CLOUD_FUNCTION_URL = '/api/getVocabulary';
 
 export const fetchWordsByTopic = async (topic, grade) => {
   try {
