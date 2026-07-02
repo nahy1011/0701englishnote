@@ -19,7 +19,7 @@ export const fetchWordsByTopic = async (topic, grade) => {
     return data;
   } catch (error) {
     console.error("Failed to fetch words from AI:", error);
-    alert("AI 연동에 실패했습니다. Firebase 로컬 에뮬레이터가 실행 중인지 확인하거나 백엔드 설정을 점검해주세요.");
+    alert("AI 서버 연동에 실패했습니다. 버셀(Vercel) 환경 변수에 GEMINI_API_KEY가 정확히 설정되었는지 확인해 주세요.");
     
     // Fallback data for smooth UI testing if API fails
     return {
