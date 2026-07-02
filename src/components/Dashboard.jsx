@@ -75,7 +75,7 @@ function Dashboard({ selectedWords, onToggleWord, onStartBlackboard }) {
   return (
     <>
       <header className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ margin: 0 }}>Line-Up English</h1>
+        <h1 style={{ margin: 0 }}>Hannah's Word Canvas</h1>
         <div>
           {user ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -91,6 +91,17 @@ function Dashboard({ selectedWords, onToggleWord, onStartBlackboard }) {
       </header>
       
       <main className="main-content">
+        <div style={{ background: '#e0f2fe', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem', color: '#0369a1', lineHeight: '1.6' }}>
+          <h3 style={{ marginTop: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <span>💡</span> Hannah's Word Canvas 100% 활용 가이드
+          </h3>
+          <ul style={{ margin: 0, paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <li><strong>1. AI 맞춤 단어 추천:</strong> 수업 주제와 학년을 입력하면 AI가 수준별(하/중/상) 핵심 단어를 즉시 뽑아줍니다.</li>
+            <li><strong>2. 칠판 띄우기:</strong> 원하는 단어를 체크하고 <strong>'전자칠판 모드 시작'</strong>을 누르면, 실제 4선 영어 공책 화면으로 변신합니다! (원어민 발음 듣기, 뜻 가리기 지원)</li>
+            <li><strong>3. 나만의 단어장:</strong> 우측 상단의 <strong>Google 로그인</strong> 후 단어장을 저장해두면, 언제든 다시 꺼내서 수업에 활용할 수 있습니다.</li>
+          </ul>
+        </div>
+
         <form className="search-form" onSubmit={handleSearch}>
           <div className="input-group">
             <label htmlFor="topic">주제 입력 (예: 과일, 환경)</label>

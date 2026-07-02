@@ -1,0 +1,13 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 사용자(users) 컬렉션 내의 문서 보호 규칙
+    match /users/{userId} {
+      // 본인이 로그인한 상태(request.auth != null)이고, 
+      // 자신의 고유 ID(request.auth.uid)와 문서의 ID(userId)가 정확히 일치할 때만
+      // 읽기(read)와 쓰기(write)를 허용합니다.
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
