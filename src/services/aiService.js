@@ -1,6 +1,10 @@
 // AI Service for interacting with Firebase Cloud Functions
 
-const CLOUD_FUNCTION_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5001/line-up-english/us-central1/getVocabulary';
+// Development uses local emulator, Production uses Firebase Hosting Rewrite URL
+// Development uses local emulator, Production uses Firebase Hosting Rewrite URL
+const CLOUD_FUNCTION_URL = import.meta.env.PROD 
+  ? '/api/getVocabulary' 
+  : 'http://127.0.0.1:5001/demo-test/us-central1/getVocabulary';
 
 export const fetchWordsByTopic = async (topic, grade) => {
   try {

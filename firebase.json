@@ -9,9 +9,30 @@
       "*.local"
     ]
   },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/getVocabulary",
+        "function": "getVocabulary"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
   "emulators": {
     "functions": {
       "port": 5001
+    },
+    "hosting": {
+      "port": 5000
     },
     "ui": {
       "enabled": true

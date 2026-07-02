@@ -1,28 +1,93 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { fetchWordsByTopic } from '../services/aiService';
+import { auth, db, loginWithGoogle, logout } from '../lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import Footer from './Footer';
+import Modal from './Modal';
+import TermsContent from './policies/TermsContent';
+import PrivacyContent from './policies/PrivacyContent';
 
 function Dashboard({ selectedWords, onToggleWord, onStartBlackboard }) {
   const [topic, setTopic] = useState('');
   const [grade, setGrade] = useState('elem3-4');
   const [loading, setLoading] = useState(false);
   const [wordData, setWordData] = useState(null);
+  
+  const [user, setUser] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!topic) return;
     setLoading(true);
-    // Fetch mock data
+    // Fetch AI data
     const data = await fetchWordsByTopic(topic, grade);
     setWordData(data);
     setLoading(false);
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        // Load saved words
+        const docRef = doc(db, 'users', currentUser.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.selectedWords) {
+            // Replace selectedWords if needed (In a real app, you might want a set/add mechanism)
+            // But here we rely on the parent component's state. 
+            // For simplicity, we just log it or we need a prop to set selected words from parent.
+            console.log("Loaded saved words:", data.selectedWords);
+          }
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleSaveToFirestore = async () => {
+    if (!user) {
+      alert('저장하려면 먼저 로그인해 주세요!');
+      return;
+    }
+    setIsSaving(true);
+    try {
+      await setDoc(doc(db, 'users', user.uid), {
+        selectedWords: selectedWords,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+      alert('단어장이 성공적으로 저장되었습니다!');
+    } catch (error) {
+      console.error('Error saving to Firestore:', error);
+      alert('저장에 실패했습니다.');
+    }
+    setIsSaving(false);
   };
 
   const isSelected = (word) => selectedWords.some(w => w.word === word);
 
   return (
     <>
-      <header className="header">
-        <h1>Line-Up English</h1>
+      <header className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h1 style={{ margin: 0 }}>Line-Up English</h1>
+        <div>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <span>{user.displayName} 선생님</span>
+              <button className="btn" onClick={logout} style={{ padding: '0.5rem 1rem' }}>로그아웃</button>
+            </div>
+          ) : (
+            <button className="btn btn-primary" onClick={loginWithGoogle} style={{ padding: '0.5rem 1rem' }}>
+              Google 로그인
+            </button>
+          )}
+        </div>
       </header>
       
       <main className="main-content">
@@ -119,14 +184,37 @@ function Dashboard({ selectedWords, onToggleWord, onStartBlackboard }) {
             <span key={w.word} className="tag">{w.word}</span>
           ))}
         </div>
-        <button 
-          className="btn btn-primary" 
-          style={{padding: '1rem 2rem', fontSize: '1.125rem'}}
-          onClick={onStartBlackboard}
-        >
-          전자칠판 모드 시작
-        </button>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button 
+            className="btn" 
+            style={{padding: '1rem 2rem', fontSize: '1.125rem', background: '#fff', border: '1px solid #cbd5e1'}}
+            onClick={handleSaveToFirestore}
+            disabled={isSaving || selectedWords.length === 0}
+          >
+            {isSaving ? '저장 중...' : '💾 내 단어장 저장'}
+          </button>
+          <button 
+            className="btn btn-primary" 
+            style={{padding: '1rem 2rem', fontSize: '1.125rem'}}
+            onClick={onStartBlackboard}
+          >
+            전자칠판 모드 시작
+          </button>
+        </div>
       </div>
+
+      <Footer 
+        onOpenTerms={() => setIsTermsOpen(true)}
+        onOpenPrivacy={() => setIsPrivacyOpen(true)}
+      />
+
+      <Modal isOpen={isTermsOpen} onClose={() => setIsTermsOpen(false)} title="이용약관">
+        <TermsContent />
+      </Modal>
+
+      <Modal isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} title="개인정보처리방침">
+        <PrivacyContent />
+      </Modal>
     </>
   );
 }
