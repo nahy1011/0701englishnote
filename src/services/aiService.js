@@ -1,9 +1,6 @@
-// AI Service for interacting with Firebase Cloud Functions
-
-// Development uses local emulator, Production uses Firebase Hosting Rewrite URL
-// Development uses local emulator, Production uses Firebase Hosting Rewrite URL
+// Vercel deployment uses absolute URL to Firebase Functions, local dev uses local emulator
 const CLOUD_FUNCTION_URL = import.meta.env.PROD 
-  ? '/api/getVocabulary' 
+  ? 'https://us-central1-265788836290.cloudfunctions.net/getVocabulary' 
   : 'http://127.0.0.1:5001/demo-test/us-central1/getVocabulary';
 
 export const fetchWordsByTopic = async (topic, grade) => {
